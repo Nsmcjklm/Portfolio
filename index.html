@@ -1,0 +1,912 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portfolio — Nassim Chakhad</title>
+<meta name="description" content="Portfolio de Nassim Chakhad, développeur web : projets, compétences et contact.">
+<meta name="theme-color" content="#7f80d6">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --page: #e6e6e6;
+    --card: #f4f4f4;
+    --ink: #0d0d0d;
+    --muted: #5b5b66;
+    --violet: #7f80d6;
+    --pink: #f0b0f5;
+    --mint: #a6dcd6;
+    --lilac: #8f79c9;
+    --gray: #5e5e5e;
+    --yellow: #fdc46a;
+    --radius: 16px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Lexend", system-ui, sans-serif;
+    background: var(--page);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 48px 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; display: block; }
+
+  /* =========================================================
+     CARTE PRINCIPALE (hero)
+     ========================================================= */
+  .shell {
+    width: min(1120px, 100%);
+    margin: 0 auto;
+    background: var(--card);
+    border-radius: 22px;
+    padding: 50px 58px 50px 22px;
+    box-shadow: 0 60px 80px -40px rgba(0,0,0,.18);
+    display: grid;
+    grid-template-columns: 40px 360px 1fr;
+    gap: 0 34px;
+  }
+
+  /* Navigation verticale */
+  .side-nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 150px 0 30px;
+  }
+  .side-nav a {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 13px;
+    font-weight: 500;
+    transition: color .2s;
+  }
+  .side-nav a:hover { color: var(--violet); }
+
+  /* Panneau profil */
+  .profile { position: relative; padding-top: 50px; }
+  .about-tag {
+    position: absolute; top: 12px; left: 6px;
+    display: flex; align-items: center; gap: 10px;
+    font-size: 15px; font-weight: 500;
+  }
+  .about-tag svg { width: 15px; height: 15px; }
+  .profile-card {
+    position: relative;
+    background: var(--violet);
+    border-radius: var(--radius) 0 var(--radius) var(--radius);
+    height: 560px;
+    color: #fff;
+    padding: 0 24px 28px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+  }
+  /* languette en haut à droite, bord biseauté */
+  .profile-card::before {
+    content: "";
+    position: absolute;
+    right: 0; top: -44px;
+    width: 64%; height: 46px;
+    background: var(--violet);
+    border-top-right-radius: var(--radius);
+    clip-path: polygon(40px 0, 100% 0, 100% 100%, 0 100%);
+  }
+  .avatar {
+    position: absolute;
+    top: 30px; left: 50%;
+    width: 280px; height: 300px;
+    transform: translateX(-38%);
+  }
+  .avatar .ring {
+    position: absolute; left: 0; top: 18px;
+    width: 280px; height: 280px; border-radius: 50%;
+    border: 5px solid #fff;
+    background: var(--pink);
+    overflow: hidden;
+  }
+  /* photo en noir & blanc comme sur la maquette — retire "filter" pour la garder en couleur */
+  .avatar .ring img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: 50% 62%;
+    transform: scale(1.18);
+    transform-origin: 58% 52%;
+    filter: grayscale(1) contrast(1.08);
+  }
+  .hello {
+    position: relative;
+    font-size: 56px; line-height: .98; letter-spacing: -.02em;
+  }
+  .hello .thin { font-weight: 200; display: block; }
+  .hello strong { font-weight: 500; display: block; }
+  .mail {
+    margin-top: 56px;
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 13px;
+    padding-bottom: 10px;
+    border-bottom: 1.5px dashed rgba(255,255,255,.7);
+    width: fit-content;
+    position: relative;
+  }
+  .mail svg { width: 15px; height: 15px; flex: none; }
+  .badge {
+    position: absolute; right: 22px; bottom: 20px;
+    width: 92px; height: 92px;
+    border-radius: 50%;
+    background: #111;
+    display: grid; place-items: center;
+    box-shadow: 0 0 0 4px var(--violet), 0 0 0 5.5px rgba(17,17,17,.6);
+    animation: spin 18s linear infinite;
+  }
+  .badge svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .badge .dot { width: 24px; height: 24px; border-radius: 50%; background: #fff; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Colonne droite */
+  .content {
+    display: grid;
+    grid-template-columns: 1.5fr .5fr;
+    grid-template-rows: auto 248px 148px;
+    gap: 34px 32px;
+    align-content: start;
+  }
+  h1 {
+    grid-column: 1 / -1;
+    font-size: clamp(56px, 10vw, 128px);
+    font-weight: 600;
+    letter-spacing: .015em;
+    line-height: 1;
+    position: relative;
+    width: fit-content;
+    padding-right: 26px;
+    margin-top: -8px;
+  }
+  h1::after {
+    content: "";
+    position: absolute; right: 0; top: 10px;
+    width: 18px; height: 18px;
+    border-top: 6px solid var(--ink);
+    border-right: 6px solid var(--ink);
+  }
+  .corner { position: relative; }
+  .corner::after {
+    content: "";
+    position: absolute; top: 12px; right: 12px;
+    width: 9px; height: 9px;
+    border-top: 2px solid currentColor;
+    border-right: 2px solid currentColor;
+    opacity: .85;
+  }
+
+  /* Aperçus des 2 projets */
+  .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .tile {
+    border-radius: var(--radius);
+    overflow: hidden;
+    color: #fff;
+    display: block;
+  }
+  .tile > div { width: 100%; height: 100%; transition: transform .4s; }
+  .tile:hover > div { transform: scale(1.04); }
+  .tile-label {
+    position: absolute; left: 12px; bottom: 12px; right: 12px;
+    width: fit-content;
+    font-size: 12px; font-weight: 500;
+    background: rgba(0,0,0,.45); backdrop-filter: blur(6px);
+    padding: 6px 10px; border-radius: 999px;
+  }
+
+  /* Visuel Spot : fond nuit + orbes + carte en verre */
+  .v-spot {
+    position: relative; overflow: hidden;
+    background: #030712;
+    display: grid; place-items: center;
+  }
+  .v-spot .orb { position: absolute; width: 70%; aspect-ratio: 1; border-radius: 50%; filter: blur(30px); }
+  .v-spot .o1 { top: -30%; left: -20%; background: rgba(99,102,241,.6); }
+  .v-spot .o2 { bottom: -35%; right: -20%; background: rgba(236,72,153,.45); }
+  .v-spot .glass {
+    position: relative;
+    width: 70%; max-width: 260px;
+    margin-bottom: 26px;
+    padding: 14px 16px; border-radius: 16px;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.15);
+    backdrop-filter: blur(12px);
+    color: #f8fafc;
+    display: grid; gap: 4px;
+  }
+  .v-spot .glass small { font-size: 10px; font-weight: 700; letter-spacing: 1px; color: #cbd5e1; }
+  .v-spot .glass b { font-size: 22px; font-weight: 700; }
+  .v-spot .glass span { font-size: 11px; color: #94a3b8; display: flex; justify-content: space-between; align-items: center; }
+  .v-spot .glass i { font-style: normal; background: #6366f1; color: #fff; padding: 3px 8px; border-radius: 8px; font-size: 10px; }
+
+  /* Visuel NØMIA (boutique) : fond noir + logo argenté */
+  .v-nomia {
+    background: radial-gradient(circle at 50% 40%, #2a2a2a, #0b0b0b 70%);
+    display: grid; place-items: center;
+  }
+  .v-nomia img { width: 78%; max-width: 280px; transform: translateY(6%); margin-bottom: 18px; }
+  /* version compacte dans les petites tuiles du haut */
+  .tile .v-spot .glass { width: 74%; padding: 10px 12px; }
+  .tile .v-spot .glass span { display: none; }
+  .tile .v-spot .glass b { font-size: 18px; }
+
+  /* Chiffres */
+  .stats {
+    display: grid; grid-template-rows: 1fr;
+    border-radius: var(--radius); overflow: hidden;
+  }
+  .stat { padding: 26px 18px; display: flex; flex-direction: column; justify-content: center; }
+  .stat b { font-size: 30px; font-weight: 600; line-height: 1.1; }
+  .stat span { font-size: 16px; }
+  .stat.mint { background: var(--mint); }
+  .stat.lilac { background: var(--lilac); color: #fff; }
+
+  /* Ligne du bas */
+  .bottom {
+    grid-column: 1 / -1;
+    display: grid;
+  }
+  .skills {
+    font: inherit; cursor: pointer;
+    background: var(--gray); color: #fff;
+    border-radius: var(--radius);
+    border: 1.5px solid rgba(0,0,0,.25);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+    font-size: 18px;
+    transition: background .2s, transform .2s;
+  }
+  .skills:hover { background: #4f4f4f; }
+  .skills:active { transform: scale(.99); }
+  .skills svg { width: 30px; height: 30px; margin-bottom: 4px; }
+  .skills-hint { font-size: 12px; opacity: .7; }
+
+  /* Fenêtre Compétences */
+  .skills-dialog {
+    margin: auto;
+    width: min(460px, calc(100% - 32px));
+    border: 0; border-radius: 22px;
+    padding: 0;
+    background: var(--card); color: var(--ink);
+    box-shadow: 0 40px 80px -20px rgba(0,0,0,.4);
+  }
+  .dialog-inner { padding: 28px; }
+
+  /* Fenêtre capture d'un projet */
+  .shot-dialog {
+    margin: auto;
+    width: min(1000px, calc(100% - 32px));
+    max-height: calc(100vh - 32px);
+    border: 0; border-radius: 22px; padding: 0;
+    background: var(--card); color: var(--ink);
+    box-shadow: 0 40px 80px -20px rgba(0,0,0,.4);
+  }
+  .shot-dialog::backdrop { background: rgba(20,20,40,.55); backdrop-filter: blur(4px); }
+  .shot-dialog[open] { animation: pop .25s ease-out; }
+  .shot-inner { padding: 24px; }
+  .shot-inner .dialog-head { margin-bottom: 16px; }
+  .shot-inner .dialog-head h2 { font-size: 22px; }
+  #shot-img {
+    width: 100%; height: auto;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,.08);
+    background: #111;
+  }
+  #shot-desc { margin: 14px 0 16px; font-size: 14px; color: var(--muted); line-height: 1.5; }
+  .shot-open {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--ink); color: #fff;
+    padding: 10px 18px; border-radius: 999px;
+    font-size: 14px; font-weight: 500;
+    transition: background .2s;
+  }
+  .shot-open:hover { background: var(--violet); }
+  [data-shot].project-visual { cursor: zoom-in; }
+  .skills-dialog::backdrop { background: rgba(20,20,40,.45); backdrop-filter: blur(4px); }
+  .skills-dialog[open] { animation: pop .25s ease-out; }
+  @keyframes pop { from { opacity: 0; transform: translateY(12px) scale(.97); } }
+  .dialog-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
+  .dialog-head h2 { font-size: 26px; font-weight: 600; }
+  .dialog-close {
+    width: 36px; height: 36px; border-radius: 50%; border: 0; cursor: pointer;
+    background: #e4e4ec; font: inherit; font-size: 18px; line-height: 1;
+  }
+  .dialog-close:hover { background: #d6d6e2; }
+  .skill-list { list-style: none; display: grid; gap: 12px; }
+  .skill {
+    display: grid; grid-template-columns: 44px 1fr; gap: 6px 14px; align-items: center;
+    background: #fff; border-radius: 14px; padding: 14px 16px;
+    border: 1px solid rgba(0,0,0,.06);
+  }
+  .skill-icon {
+    grid-row: span 2;
+    width: 44px; height: 44px; border-radius: 12px;
+    display: grid; place-items: center;
+    font-size: 12px; font-weight: 700; color: #fff;
+  }
+  .skill-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .skill-top b { font-size: 16px; font-weight: 600; }
+  .skill-top span { font-size: 12px; color: var(--muted); }
+  .bar { height: 6px; border-radius: 999px; background: #ececf3; overflow: hidden; }
+  .bar i { display: block; height: 100%; border-radius: inherit; width: var(--lvl); }
+  .skills-dialog[open] .bar i { animation: fill .8s ease-out; }
+  @keyframes fill { from { width: 0; } }
+
+  /* =========================================================
+     SECTION PROJETS
+     ========================================================= */
+  .section {
+    width: min(1120px, 100%);
+    margin: 40px auto 0;
+    background: var(--card);
+    border-radius: 22px;
+    padding: 48px 58px;
+    scroll-margin-top: 24px;
+  }
+  .section-head {
+    display: flex; align-items: end; justify-content: space-between; gap: 16px;
+    margin-bottom: 32px;
+  }
+  .section h2 { font-size: clamp(32px, 5vw, 48px); font-weight: 600; letter-spacing: .01em; line-height: 1; }
+  .section-head p { color: var(--muted); font-size: 15px; max-width: 360px; }
+  .projects {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;
+  }
+  .project {
+    background: #fff;
+    border-radius: var(--radius);
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    border: 1px solid rgba(0,0,0,.06);
+    transition: transform .25s, box-shadow .25s;
+  }
+  .project:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -20px rgba(0,0,0,.25); }
+  .project-visual {
+    aspect-ratio: 16 / 10;
+    display: grid; place-items: center;
+    font-size: 44px; font-weight: 600;
+  }
+  .project-visual > div { width: 100%; height: 100%; }
+  .project-visual .v-spot .glass, .project-visual .v-nomia img { margin-bottom: 0; }
+  .project-body { padding: 20px 20px 22px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .project-body h3 { font-size: 19px; font-weight: 600; }
+  .project-body p { font-size: 14px; line-height: 1.5; color: var(--muted); flex: 1; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tags li {
+    list-style: none; font-size: 12px; font-weight: 500;
+    padding: 4px 10px; border-radius: 999px; background: #efeff7; color: #4b4c9e;
+  }
+  .project-link {
+    margin-top: 4px; font-size: 14px; font-weight: 500;
+    display: inline-flex; align-items: center; gap: 6px; color: var(--ink);
+  }
+  .project-link span { transition: transform .2s; }
+  .project:hover .project-link span { transform: translateX(4px); }
+
+  /* Contact */
+  .contact { margin-top: 24px; }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px; align-items: start; }
+  .contact-info p { color: var(--muted); font-size: 15px; line-height: 1.6; margin: 16px 0 24px; max-width: 380px; }
+  .contact-mail {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--violet); color: #fff;
+    padding: 14px 20px; border-radius: 14px;
+    font-size: 15px; font-weight: 500;
+    word-break: break-all;
+    transition: background .2s;
+  }
+  .contact-mail:hover { background: #6d6ec9; }
+  .contact-mail svg { width: 18px; height: 18px; flex: none; }
+  .copy-mail {
+    display: block; margin-top: 12px;
+    background: none; border: 0; cursor: pointer;
+    font: inherit; font-size: 13px; color: var(--muted);
+    text-decoration: underline; text-underline-offset: 3px;
+  }
+  .contact-form { display: grid; gap: 14px; }
+  .contact-form label { display: grid; gap: 6px; font-size: 13px; font-weight: 500; }
+  .contact-form input, .contact-form textarea {
+    font: inherit; font-size: 15px; font-weight: 400;
+    padding: 12px 14px; border-radius: 12px;
+    border: 1px solid rgba(0,0,0,.12); background: #fff; color: var(--ink);
+    resize: vertical;
+  }
+  .contact-form input:focus, .contact-form textarea:focus { outline: 2px solid var(--violet); outline-offset: 1px; border-color: transparent; }
+  .contact-form button {
+    justify-self: start;
+    font: inherit; font-size: 15px; font-weight: 500; cursor: pointer;
+    background: var(--ink); color: #fff; border: 0;
+    padding: 12px 22px; border-radius: 999px;
+    transition: background .2s;
+  }
+  .contact-form button:hover { background: var(--violet); }
+  .contact-form button:disabled { opacity: .6; cursor: wait; }
+  .contact-form label small { font-weight: 400; color: var(--muted); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .honey { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+  .form-status { font-size: 14px; min-height: 1.2em; color: var(--muted); }
+  .form-status.ok { color: #1f8a5b; }
+  .form-status.error { color: #c0392b; }
+  .form-status a { text-decoration: underline; }
+
+  .footer {
+    width: min(1120px, 100%);
+    margin: 24px auto 0;
+    display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    font-size: 13px; color: var(--muted); padding: 0 8px;
+  }
+
+  /* =========================================================
+     TABLETTE
+     ========================================================= */
+  @media (max-width: 1080px) {
+    body { padding: 32px 16px; }
+    .shell { grid-template-columns: 1fr; padding: 32px; gap: 32px; }
+    .side-nav { flex-direction: row; justify-content: center; gap: 28px; padding: 0; order: -1; }
+    .side-nav a { writing-mode: horizontal-tb; transform: none; }
+    .profile { max-width: 420px; width: 100%; margin: 0 auto; }
+    .section { padding: 40px 32px; }
+    .projects { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* =========================================================
+     MOBILE
+     ========================================================= */
+  @media (max-width: 640px) {
+    body { padding: 0 0 24px; background: var(--card); }
+
+    .shell {
+      border-radius: 0; box-shadow: none;
+      padding: 0 16px 24px; gap: 20px;
+    }
+
+    /* barre de navigation collante */
+    .side-nav {
+      position: sticky; top: 0; z-index: 10;
+      margin: 0 -16px;
+      padding: 12px 16px;
+      background: rgba(244,244,244,.9);
+      backdrop-filter: blur(10px);
+      justify-content: space-between; gap: 8px;
+      border-bottom: 1px solid rgba(0,0,0,.06);
+    }
+    .side-nav a {
+      font-size: 13px; padding: 7px 12px; border-radius: 999px;
+      background: #fff; border: 1px solid rgba(0,0,0,.08);
+    }
+
+    .profile { padding-top: 40px; max-width: none; }
+    .about-tag { top: 8px; left: 2px; font-size: 14px; }
+    .profile-card::before { top: -36px; height: 38px; width: 58%; clip-path: polygon(32px 0, 100% 0, 100% 100%, 0 100%); }
+    .profile-card {
+      height: auto;
+      padding: 16px 20px 24px;
+      justify-content: flex-start;
+    }
+    .avatar {
+      position: relative; top: 0; left: 0;
+      transform: none;
+      margin: 0 auto -6px;
+      zoom: .8;
+    }
+    .hello { font-size: clamp(40px, 13vw, 52px); }
+    .mail { margin-top: 28px; font-size: 13px; max-width: calc(100% - 90px); word-break: break-all; }
+    .badge { width: 76px; height: 76px; right: 16px; bottom: 16px; }
+    .badge .dot { width: 18px; height: 18px; }
+
+    h1 { font-size: 17vw; padding-right: 18px; margin-top: 4px; }
+    h1::after { width: 12px; height: 12px; border-width: 4px; top: 6px; }
+
+    .content {
+      grid-template-columns: 1fr;
+      grid-template-rows: none;
+      gap: 14px;
+    }
+    .tiles { grid-template-columns: 1fr; gap: 14px; }
+    .tile { aspect-ratio: 16 / 10; }
+    .stats { grid-template-rows: none; }
+    .stat { padding: 20px 16px; }
+    .stat b { font-size: 26px; }
+    .skills { min-height: 120px; }
+    .dialog-inner { padding: 22px 18px; }
+    .shot-inner { padding: 18px 14px; }
+    .shot-inner .dialog-head h2 { font-size: 18px; }
+
+    .section { margin-top: 0; border-radius: 0; padding: 32px 16px 16px; }
+    .section-head { flex-direction: column; align-items: flex-start; margin-bottom: 20px; }
+    .projects { grid-template-columns: 1fr; gap: 16px; }
+    .footer { padding: 16px 16px 0; flex-direction: column; }
+    .contact { margin-top: 0; border-top: 1px solid rgba(0,0,0,.06); }
+    .contact-grid { grid-template-columns: 1fr; gap: 28px; }
+    .contact-form button { justify-self: stretch; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .badge, .skills-dialog[open], .skills-dialog[open] .bar i { animation: none; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- =========================================================
+     HERO
+     ========================================================= -->
+<main class="shell">
+
+  <nav class="side-nav" aria-label="Navigation principale">
+    <a href="#contact">Contact</a>
+    <a href="#competences" data-open-skills>Compétences</a>
+    <a href="#projets">Projets</a>
+  </nav>
+
+  <section class="profile" aria-labelledby="hello">
+    <div class="about-tag">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M8 1.5 10 6l-2 2-2-2 2-4.5ZM8 14.5 6 10l2-2 2 2-2 4.5ZM1.5 8 6 6l2 2-2 2-4.5-2ZM14.5 8 10 10 8 8l2-2 4.5 2Z"/></svg>
+      À propos
+    </div>
+
+    <div class="profile-card">
+      <div class="avatar">
+        <div class="ring">
+          <img src="images/nassim.webp" alt="Photo de Nassim Chakhad" width="767" height="1024">
+        </div>
+      </div>
+
+      <h2 class="hello" id="hello">
+        <span class="thin">Moi,</span>
+        <strong>Nassim</strong>
+        <strong>Chakhad</strong>
+      </h2>
+
+      <a class="mail" href="mailto:nassimchakhad21@gmail.com">
+        nassimchakhad21@gmail.com
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 9V4.5A1.5 1.5 0 0 1 3.5 3h9A1.5 1.5 0 0 1 14 4.5V9M2 9v2.5A1.5 1.5 0 0 0 3.5 13h9a1.5 1.5 0 0 0 1.5-1.5V9M2 9h3.5l1 1.5h3l1-1.5H14"/></svg>
+      </a>
+
+      <div class="badge" aria-hidden="true">
+        <svg viewBox="0 0 100 100">
+          <defs><path id="circle" d="M50,50 m-36,0 a36,36 0 1,1 72,0 a36,36 0 1,1 -72,0"/></defs>
+          <text font-family="Lexend" font-size="8" font-weight="500" letter-spacing="1.1" fill="#fff" textLength="222" lengthAdjust="spacing">
+            <textPath href="#circle">MON PORTFOLIO • <tspan fill="#a6dcd6">2026</tspan> • DEV &amp; DESIGN •</textPath>
+          </text>
+        </svg>
+        <span class="dot"></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="content" aria-label="Aperçu du portfolio">
+    <h1>Portfolio</h1>
+
+    <!-- Aperçus des 2 projets -->
+    <div class="tiles">
+      <a class="tile corner" data-shot="spot" href="#projet-spot" aria-label="Voir le projet Spot">
+        <div class="v-spot" aria-hidden="true">
+          <span class="orb o1"></span><span class="orb o2"></span>
+          <div class="glass"><small>✦ SPOT</small><b>France</b><span>12 °C · France Info <i>▶ Écouter</i></span></div>
+        </div>
+        <span class="tile-label">Spot</span>
+      </a>
+      <a class="tile corner" data-shot="nomia" href="#projet-nomia" aria-label="Voir le projet NØMIA">
+        <div class="v-nomia" aria-hidden="true"><img src="images/nomia-logo.png" alt=""></div>
+        <span class="tile-label">NØMIA · Boutique</span>
+      </a>
+    </div>
+
+    <div class="stats">
+      <div class="stat mint corner"><b>2</b><span>Projets</span></div>
+    </div>
+
+    <div class="bottom">
+      <button class="skills corner" type="button" id="competences" data-open-skills aria-haspopup="dialog">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 6-6 6 6 6M16 6l6 6-6 6M14 4l-4 16"/></svg>
+        <span class="skills-title">Compétences</span>
+        <span class="skills-hint">Cliquer pour voir</span>
+      </button>
+    </div>
+  </section>
+</main>
+
+<!-- =========================================================
+     PROJETS
+     ========================================================= -->
+<section class="section" id="projets" aria-labelledby="projets-title">
+  <div class="section-head">
+    <h2 id="projets-title">Mes projets</h2>
+    <p>Une sélection de ce que j'ai conçu et développé, du design de l'interface jusqu'à la mise en ligne.</p>
+  </div>
+
+  <div class="projects">
+
+    <!-- Projet 1 : Spot (dossier projets/spot) -->
+    <article class="project" id="projet-spot">
+      <div class="project-visual" data-shot="spot" title="Voir la capture">
+        <div class="v-spot">
+          <span class="orb o1"></span><span class="orb o2"></span>
+          <div class="glass"><small>✦ SPOT</small><b>France</b><span>12 °C · France Info <i>▶ Écouter</i></span></div>
+        </div>
+      </div>
+      <div class="project-body">
+        <h3>Spot — Radio &amp; météo</h3>
+        <p>Choisis un pays parmi 20 : l'appli lance sa radio nationale en direct et affiche la météo en temps réel de sa capitale grâce à l'API Open-Meteo. Recherche instantanée et interface « liquid glass ».</p>
+        <ul class="tags"><li>HTML</li><li>CSS</li><li>JavaScript</li><li>API</li></ul>
+        <a class="project-link" data-shot="spot" href="projets/spot/index.html" target="_blank">Voir le projet <span>→</span></a>
+      </div>
+    </article>
+
+    <!-- Projet 2 : NØMIA (dossier projets/nomia) -->
+    <article class="project" id="projet-nomia">
+      <div class="project-visual" data-shot="nomia" title="Voir la capture">
+        <div class="v-nomia"><img src="images/nomia-logo.png" alt=""></div>
+      </div>
+      <div class="project-body">
+        <h3>NØMIA — Boutique en ligne</h3>
+        <p>Site e-commerce avec catalogue de produits, inscription et connexion des clients, et un système de points de fidélité : 100 points offerts à l'inscription.</p>
+        <ul class="tags"><li>HTML</li><li>CSS</li><li>JavaScript</li></ul>
+        <a class="project-link" data-shot="nomia" href="projets/nomia/index.html" target="_blank">Voir le projet <span>→</span></a>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- =========================================================
+     CONTACT
+     ========================================================= -->
+<section class="section contact" id="contact" aria-labelledby="contact-title">
+  <div class="contact-grid">
+    <div class="contact-info">
+      <h2 id="contact-title">Contact</h2>
+      <p>Entreprise, commerçant ou particulier : un projet de site, une question ou une proposition ? Remplis le formulaire, je reçois ton message directement par e-mail et je réponds rapidement.</p>
+      <a class="contact-mail" href="mailto:nassimchakhad21@gmail.com">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4.5A1.5 1.5 0 0 1 3.5 3h9A1.5 1.5 0 0 1 14 4.5v7a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 11.5v-7Zm0 .5 6 4 6-4"/></svg>
+        nassimchakhad21@gmail.com
+      </a>
+      <button class="copy-mail" type="button" id="copy-mail">Copier l'adresse</button>
+    </div>
+
+    <!-- Formulaire envoyé par FormSubmit (formsubmit.co) directement sur nassimchakhad21@gmail.com -->
+    <form class="contact-form" id="contact-form" action="https://formsubmit.co/nassimchakhad21@gmail.com" method="POST">
+      <div class="form-row">
+        <label>Nom
+          <input type="text" name="Nom" required autocomplete="name">
+        </label>
+        <label>Entreprise (facultatif)
+          <input type="text" name="Entreprise" autocomplete="organization">
+        </label>
+      </div>
+      <label>E-mail (pour te répondre)
+        <input type="email" name="email" required autocomplete="email">
+      </label>
+      <label>Sujet
+        <input type="text" name="Sujet" required>
+      </label>
+      <label>Message
+        <textarea name="Message" rows="5" required></textarea>
+      </label>
+      <!-- anti-spam : champ invisible que seuls les robots remplissent -->
+      <input type="text" name="_honey" class="honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button type="submit">Envoyer le message <span>→</span></button>
+      <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<!-- =========================================================
+     FENÊTRE COMPÉTENCES (s'ouvre au clic sur « Compétences »)
+     Pour changer un niveau : modifie --lvl (0% à 100%) et le texte à droite.
+     ========================================================= -->
+<dialog class="skills-dialog" id="skills-dialog" aria-labelledby="skills-title">
+ <div class="dialog-inner">
+  <div class="dialog-head">
+    <h2 id="skills-title">Compétences</h2>
+    <button class="dialog-close" type="button" data-close-skills aria-label="Fermer">✕</button>
+  </div>
+  <ul class="skill-list">
+    <li class="skill">
+      <span class="skill-icon" style="background:#e44d26">HTML</span>
+      <div class="skill-top"><b>HTML</b><span>Bonne maîtrise</span></div>
+      <div class="bar"><i style="--lvl:85%; background:#e44d26"></i></div>
+    </li>
+    <li class="skill">
+      <span class="skill-icon" style="background:#2965f1">CSS</span>
+      <div class="skill-top"><b>CSS</b><span>Bonne maîtrise</span></div>
+      <div class="bar"><i style="--lvl:80%; background:#2965f1"></i></div>
+    </li>
+    <li class="skill">
+      <span class="skill-icon" style="background:#f0c419; color:#111">JS</span>
+      <div class="skill-top"><b>JavaScript</b><span>Notions</span></div>
+      <div class="bar"><i style="--lvl:35%; background:#f0c419"></i></div>
+    </li>
+    <li class="skill">
+      <span class="skill-icon" style="background:#3776ab">PY</span>
+      <div class="skill-top"><b>Python</b><span>Notions</span></div>
+      <div class="bar"><i style="--lvl:35%; background:#3776ab"></i></div>
+    </li>
+  </ul>
+ </div>
+</dialog>
+
+<script>
+  const skillsDialog = document.getElementById('skills-dialog');
+  document.querySelectorAll('[data-open-skills]').forEach(el =>
+    el.addEventListener('click', e => { e.preventDefault(); skillsDialog.showModal(); })
+  );
+  skillsDialog.querySelector('[data-close-skills]').addEventListener('click', () => skillsDialog.close());
+  // fermer en cliquant à côté de la fenêtre
+  skillsDialog.addEventListener('click', e => { if (e.target === skillsDialog) skillsDialog.close(); });
+</script>
+
+<!-- =========================================================
+     FENÊTRE CAPTURE (s'ouvre au clic sur un projet)
+     ========================================================= -->
+<dialog class="shot-dialog" id="shot-dialog" aria-labelledby="shot-title">
+  <div class="shot-inner">
+    <div class="dialog-head">
+      <h2 id="shot-title"></h2>
+      <button class="dialog-close" type="button" data-close-shot aria-label="Fermer">✕</button>
+    </div>
+    <img id="shot-img" src="" alt="">
+    <p id="shot-desc"></p>
+    <a class="shot-open" id="shot-link" href="#" target="_blank">Ouvrir le site <span>↗</span></a>
+  </div>
+</dialog>
+
+<script>
+  // Captures des projets : pour en ajouter un, ajoute une entrée ici + data-shot="nom" sur la carte
+  const shots = {
+    spot: {
+      title: 'Spot — Radio & météo',
+      img: 'images/capture-spot.png',
+      desc: "Choix du pays à droite, météo de la capitale et lecteur radio en direct à gauche.",
+      href: 'projets/spot/index.html'
+    },
+    nomia: {
+      title: 'NØMIA — Boutique en ligne',
+      img: 'images/capture-nomia.png',
+      desc: "Page d'accueil de la boutique : produits populaires, connexion et inscription avec points de fidélité.",
+      href: 'projets/nomia/index.html'
+    }
+  };
+  const shotDialog = document.getElementById('shot-dialog');
+  document.querySelectorAll('[data-shot]').forEach(el =>
+    el.addEventListener('click', e => {
+      const s = shots[el.dataset.shot];
+      if (!s) return;
+      e.preventDefault();
+      document.getElementById('shot-title').textContent = s.title;
+      const img = document.getElementById('shot-img');
+      img.src = s.img;
+      img.alt = 'Capture du site ' + s.title;
+      document.getElementById('shot-desc').textContent = s.desc;
+      document.getElementById('shot-link').href = s.href;
+      shotDialog.showModal();
+    })
+  );
+  shotDialog.querySelector('[data-close-shot]').addEventListener('click', () => shotDialog.close());
+  shotDialog.addEventListener('click', e => { if (e.target === shotDialog) shotDialog.close(); });
+
+  // Contact : les messages arrivent dans la boîte nassimchakhad21@gmail.com
+  const MAIL = 'nassimchakhad21@gmail.com';
+  // >>> Colle ici ta clé Web3Forms (reçue par mail sur web3forms.com). Vide = on utilise FormSubmit.
+  const WEB3FORMS_KEY = '';
+  const form = document.getElementById('contact-form');
+  const status = document.getElementById('form-status');
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const btn = form.querySelector('button[type=submit]');
+    const data = Object.fromEntries(new FormData(form));
+    if (data._honey) return; // robot
+    data._subject = 'Portfolio — ' + data.Sujet + (data.Entreprise ? ' (' + data.Entreprise + ')' : '');
+    data._template = 'table';
+    data._replyto = data.email;
+
+    const show = (type, html) => { status.className = 'form-status ' + type; status.innerHTML = html; };
+    const fail = () => show('error', "L'envoi a échoué. Réessaie dans un instant ou écris directement à "
+      + '<a href="mailto:' + MAIL + '">' + MAIL + '</a>.');
+
+    // Web3Forms (rapide et fiable) dès qu'une clé est renseignée
+    if (WEB3FORMS_KEY) {
+      btn.disabled = true;
+      show('', 'Envoi en cours…');
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          signal: AbortSignal.timeout(20000),
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            access_key: WEB3FORMS_KEY,
+            subject: data._subject,
+            from_name: data.Nom + (data.Entreprise ? ' — ' + data.Entreprise : ''),
+            replyto: data.email,
+            Nom: data.Nom, Entreprise: data.Entreprise || '—', Email: data.email,
+            Sujet: data.Sujet, Message: data.Message
+          })
+        });
+        const json = await res.json().catch(() => ({}));
+        if (json.success) { form.reset(); show('ok', 'Merci ! Ton message a bien été envoyé, je te réponds rapidement.'); }
+        else fail();
+      } catch { fail(); }
+      finally { btn.disabled = false; }
+      return;
+    }
+
+    // Page ouverte en double-cliquant sur le fichier : FormSubmit refuse ce cas
+    if (location.protocol === 'file:') {
+      show('error', "L'envoi ne marche pas quand la page est ouverte en double-cliquant sur le fichier. "
+        + "Lance plutôt <b>Ouvrir-portfolio.bat</b> (dans le dossier Portfolio) ou mets le site en ligne.");
+      return;
+    }
+
+    btn.disabled = true;
+    show('', 'Envoi en cours…');
+    let json = null;
+    try {
+      const res = await fetch('https://formsubmit.co/ajax/' + MAIL, {
+        method: 'POST',
+        signal: AbortSignal.timeout(20000), // si pas de réponse en 20 s -> envoi classique
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      json = await res.json().catch(() => ({}));
+    } catch (err) {
+      // Réseau / navigateur qui bloque l'appel : on envoie le formulaire de façon classique
+      sendClassic(data);
+      return;
+    } finally {
+      btn.disabled = false;
+    }
+
+    const ok = json.success === true || json.success === 'true';
+    const msg = String(json.message || '');
+    if (ok) {
+      form.reset();
+      show('ok', 'Merci ! Ton message a bien été envoyé, je te réponds rapidement.');
+    } else if (/activ/i.test(msg)) {
+      // Premier envoi : FormSubmit attend que le propriétaire active le formulaire
+      show('error', "Le formulaire doit d'abord être activé : ouvre l'e-mail « Activate Form » envoyé par FormSubmit sur "
+        + MAIL + " (regarde aussi les spams), clique sur <b>Activate Form</b>, puis renvoie le message.");
+    } else {
+      show('error', (msg ? 'Erreur : ' + msg + '<br>' : "L'envoi a échoué. ")
+        + 'Tu peux aussi écrire directement à <a href="mailto:' + MAIL + '">' + MAIL + '</a>.');
+    }
+  });
+
+  // Envoi classique (sans JavaScript côté FormSubmit) puis retour sur la page avec un message de confirmation
+  function sendClassic(data) {
+    form.querySelectorAll('input[type=hidden]').forEach(i => i.remove());
+    const back = location.href.split('#')[0].split('?')[0] + '?envoye=1#contact';
+    Object.entries({ _subject: data._subject, _template: 'table', _captcha: 'false', _next: back })
+      .forEach(([name, value]) => {
+        const i = document.createElement('input');
+        i.type = 'hidden'; i.name = name; i.value = value;
+        form.appendChild(i);
+      });
+    HTMLFormElement.prototype.submit.call(form);
+  }
+  if (new URLSearchParams(location.search).has('envoye')) {
+    status.className = 'form-status ok';
+    status.textContent = 'Merci ! Ton message a bien été envoyé, je te réponds rapidement.';
+  }
+  const copyBtn = document.getElementById('copy-mail');
+  copyBtn.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(MAIL); copyBtn.textContent = 'Adresse copiée ✓'; }
+    catch { copyBtn.textContent = MAIL; }
+    setTimeout(() => copyBtn.textContent = "Copier l'adresse", 2000);
+  });
+</script>
+
+<footer class="footer">
+  <span>© 2026 Nassim Chakhad</span>
+  <a href="mailto:nassimchakhad21@gmail.com">nassimchakhad21@gmail.com</a>
+</footer>
+
+</body>
+</html>

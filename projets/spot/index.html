@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura World Radio & Météo - Liquid Glass</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #030712;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            --text-primary: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-blue: #6366f1;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Orbes liquides d'arrière-plan dynamiques */
+        .liquid-orb {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: -1;
+            animation: float 10s infinite alternate ease-in-out;
+        }
+        .orb-1 { top: -15%; left: -15%; background: rgba(99, 102, 241, 0.35); }
+        .orb-2 { bottom: -15%; right: -15%; background: rgba(236, 72, 153, 0.25); }
+
+        @keyframes float {
+            0% { transform: translateY(0) scale(1); }
+            100% { transform: translateY(40px) scale(1.15); }
+        }
+
+        /* Conteneur principal Liquid Glass */
+        .glass-container {
+            width: 100%;
+            max-width: 1200px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            padding: 35px;
+            box-shadow: var(--glass-shadow);
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 30px;
+            position: relative;
+        }
+
+        @media (max-width: 900px) {
+            .glass-container {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+        }
+
+        /* Colonne de Gauche : Météo & Lecteur Audio */
+        .left-panel {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 480px;
+        }
+
+        .header-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .live-tag {
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 5px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent-green);
+        }
+
+        .weather-info {
+            margin: 20px 0;
+        }
+
+        .city-name {
+            font-size: 2.8rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 5px;
+        }
+
+        .country-sub {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+
+        /* Widgets Météo Réelle */
+        .weather-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            padding: 12px 16px;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .metric-title {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        /* Lecteur Audio Liquid Glass */
+        .audio-player-box {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            padding: 16px 20px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(10px);
+        }
+
+        .audio-details h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .audio-status {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .audio-btn {
+            background: var(--accent-blue);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .audio-btn:hover {
+            opacity: 0.9;
+            transform: scale(1.03);
+        }
+
+        /* Colonne de Droite : Sélection des pays */
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .search-box {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--glass-border);
+            padding: 12px 16px;
+            border-radius: 14px;
+            color: white;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-box:focus {
+            border-color: var(--accent-blue);
+        }
+
+        .panel-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+        }
+
+        .spot-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 420px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .spot-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            padding: 14px 18px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .spot-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .spot-item.active {
+            background: rgba(255, 255, 255, 0.09);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .spot-details h4 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .spot-details p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 1px;
+        }
+
+        .spot-right-info {
+            text-align: right;
+        }
+
+        .spot-action-hint {
+            font-size: 0.75rem;
+            color: var(--accent-blue);
+            font-weight: 500;
+        }
+
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="liquid-orb orb-1"></div>
+    <div class="liquid-orb orb-2"></div>
+
+    <div class="glass-container">
+        <!-- Panneau de gauche : Infos, Météo & Contrôle de la Radio -->
+        <div class="left-panel">
+            <div>
+                <div class="header-nav">
+                    <div class="brand">✦ AURA WORLD</div>
+                    <div class="live-tag">
+                        <div class="dot"></div> Contrôle Manuel
+                    </div>
+                </div>
+
+                <div class="weather-info">
+                    <h1 class="city-name" id="cityName">France</h1>
+                    <div class="country-sub" id="countrySub">Capitale : Paris</div>
+
+                    <!-- Météo en direct via API -->
+                    <div class="weather-metrics">
+                        <div class="metric-card">
+                            <div class="metric-title">Température</div>
+                            <div class="metric-value" id="tempVal">-- °C</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-title">Vent</div>
+                            <div class="metric-value" id="windVal">-- km/h</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lecteur Audio Contrôlé par l'Utilisateur -->
+            <div class="audio-player-box">
+                <div class="audio-details">
+                    <h4 id="radioTitle">France Info</h4>
+                    <div class="audio-status" id="audioStatus">Cliquez sur écouter pour lancer</div>
+                </div>
+                <button class="audio-btn" id="audioToggleBtn">
+                    <span id="playIcon">▶</span> <span id="playText">Écouter</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Panneau de droite : Liste des pays et recherche -->
+        <div class="right-panel">
+            <div class="panel-title">Sélectionnez un pays</div>
+            <input type="text" id="searchInput" class="search-box" placeholder="Rechercher (ex: Japon, Brésil, Maroc...)" />
+            <div class="spot-list" id="spotList"></div>
+        </div>
+    </div>
+
+    <!-- Élément audio principal invisible -->
+    <audio id="globalAudioStream" crossorigin="anonymous"></audio>
+
+    <script>
+        // Catalogue mondial de pays avec radios stables et coordonnées géographiques pour la météo en direct
+        const countriesData = [
+            { name: "France", capital: "Paris", lat: 48.85, lng: 2.35, radioName: "France Info", streamUrl: "https://icecast.radiofrance.fr/franceinfo-midfi.mp3" },
+            { name: "États-Unis", capital: "Washington", lat: 38.90, lng: -77.03, radioName: "NPR News Live", streamUrl: "https://npr-ice.streamguys1.com/live.mp3" },
+            { name: "Royaume-Uni", capital: "Londres", lat: 51.50, lng: -0.12, radioName: "BBC Radio 4", streamUrl: "https://stream.live.vc.bbcmedia.co.uk/bbc_radio_fourfm" },
+            { name: "Allemagne", capital: "Berlin", lat: 52.52, lng: 13.40, radioName: "Deutschlandfunk", streamUrl: "https://st01.ssl.dlf.de/dlf/01/128/mp3/stream.mp3" },
+            { name: "Canada", capital: "Ottawa", lat: 45.42, lng: -75.69, radioName: "CBC Music", streamUrl: "https://cbclive.leanstream.co/CBC-MUSIC-TOR" },
+            { name: "Australie", capital: "Canberra", lat: -35.28, lng: 149.13, radioName: "ABC NewsRadio", streamUrl: "https://live-radio01.mediahubaustralia.com/2RNW/mp3/" },
+            { name: "Italie", capital: "Rome", lat: 41.90, lng: 12.49, radioName: "Rai Radio 1", streamUrl: "https://icestreaming.rai.1.stream.radionustream.it/rai1.mp3" },
+            { name: "Espagne", capital: "Madrid", lat: 40.41, lng: -3.70, radioName: "RNE Nacional", streamUrl: "https://rtve-live.flumotion.com/rtve/radio4.mp3" },
+            { name: "Brésil", capital: "Brasilia", lat: -15.79, lng: -47.88, radioName: "CBN Rio", streamUrl: "https://icecast.gruposinos.com.br/cbn1021.mp3" },
+            { name: "Japon", capital: "Tokyo", lat: 35.67, lng: 139.65, radioName: "J-Pop Powerplay", streamUrl: "https://kathy.torontocast.com:3060/stream" },
+            { name: "Suisse", capital: "Berne", lat: 46.94, lng: 7.44, radioName: "RTS La Première", streamUrl: "https://stream.srg-ssr.ch/m/l1/mp3_128" },
+            { name: "Belgique", capital: "Bruxelles", lat: 50.85, lng: 4.35, radioName: "RTBF Vivacité", streamUrl: "https://radios.rtbf.be/vivacite-bruxelles.mp3" },
+            { name: "Maroc", capital: "Rabat", lat: 34.02, lng: -6.83, radioName: "SNRT Chaine 1", streamUrl: "https://strom.snrt.live/chaine1.mp3" },
+            { name: "Algérie", capital: "Alger", lat: 36.75, lng: 3.04, radioName: "Chaîne 3", streamUrl: "https://webradio.tda.dz/Chaine3_64k.mp3" },
+            { name: "Tunisie", capital: "Tunis", lat: 36.80, lng: 10.18, radioName: "Radio Nationale", streamUrl: "https://radios.rtm.tn/nationale.mp3" },
+            { name: "Suède", capital: "Stockholm", lat: 59.32, lng: 18.06, radioName: "Sveriges Radio P1", streamUrl: "https://sverigesradio.se/topsy/direkt/132-hi.mp3" },
+            { name: "Norvège", capital: "Oslo", lat: 59.91, lng: 10.75, radioName: "NRK P1", streamUrl: "https://lyd.nrk.no/nrk_radio_p1_ostlandets_mp3_h" },
+            { name: "Pays-Bas", capital: "Amsterdam", lat: 52.36, lng: 4.90, radioName: "NPO Radio 1", streamUrl: "https://icecast.omroep.nl/nporadio1-bb-mp3" },
+            { name: "Pologne", capital: "Varsovie", lat: 52.22, lng: 21.01, radioName: "Polskie Radio", streamUrl: "https://stream3.polskieradio.pl/pr1/pr1.mp3" },
+            { name: "Portugal", capital: "Lisbonne", lat: 38.72, lng: -9.13, radioName: "RTP Antena 1", streamUrl: "https://stream.rtp.pt/antena1.mp3" }
+        ];
+
+        let selectedCountry = countriesData[0];
+        let isPlaying = false;
+
+        const cityNameEl = document.getElementById('cityName');
+        const countrySubEl = document.getElementById('countrySub');
+        const tempValEl = document.getElementById('tempVal');
+        const windValEl = document.getElementById('windVal');
+        const radioTitleEl = document.getElementById('radioTitle');
+        const audioStatusEl = document.getElementById('audioStatus');
+        const spotListEl = document.getElementById('spotList');
+        const searchInput = document.getElementById('searchInput');
+
+        const audioEl = document.getElementById('globalAudioStream');
+        const audioToggleBtn = document.getElementById('audioToggleBtn');
+        const playIcon = document.getElementById('playIcon');
+        const playText = document.getElementById('playText');
+
+        // Récupération de la météo réelle via l'API Open-Meteo
+        async function fetchWeather(lat, lng) {
+            tempValEl.textContent = "...";
+            windValEl.textContent = "...";
+            try {
+                const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true`);
+                const data = await response.json();
+                tempValEl.textContent = `${data.current_weather.temperature} °C`;
+                windValEl.textContent = `${data.current_weather.windspeed} km/h`;
+            } catch (error) {
+                tempValEl.textContent = "N/A";
+                windValEl.textContent = "N/A";
+            }
+        }
+
+        function renderCountryList(list) {
+            spotListEl.innerHTML = '';
+            list.forEach(c => {
+                const div = document.createElement('div');
+                div.className = `spot-item ${c.name === selectedCountry.name ? 'active' : ''}`;
+                div.onclick = () => changeCountry(c, div);
+
+                div.innerHTML = `
+                    <div class="spot-details">
+                        <h4>${c.name}</h4>
+                        <p>${c.radioName}</p>
+                    </div>
+                    <div class="spot-right-info">
+                        <div class="spot-action-hint">Sélectionner</div>
+                    </div>
+                `;
+                spotListEl.appendChild(div);
+            });
+        }
+
+        function changeCountry(country, element) {
+            document.querySelectorAll('.spot-item').forEach(el => el.classList.remove('active'));
+            if(element) element.classList.add('active');
+
+            selectedCountry = country;
+            cityNameEl.textContent = country.name;
+            countrySubEl.textContent = `Capitale : ${country.capital}`;
+            radioTitleEl.textContent = country.radioName;
+
+            // Met à jour la météo de la capitale sélectionnée
+            fetchWeather(country.lat, country.lng);
+
+            // Si l'utilisateur change de pays alors que la radio jouait, on coupe le flux pour qu'il relance manuellement son choix
+            audioEl.pause();
+            audioEl.src = "";
+            isPlaying = false;
+            playIcon.textContent = "▶";
+            playText.textContent = "Écouter";
+            audioStatusEl.textContent = "Prêt à être lancé";
+        }
+
+        // L'utilisateur choisit explicitement de lancer ou stopper la radio par lui-même
+        audioToggleBtn.onclick = () => {
+            if (!isPlaying) {
+                audioStatusEl.textContent = "Connexion au flux direct...";
+                audioEl.src = selectedCountry.streamUrl;
+                audioEl.play().then(() => {
+                    isPlaying = true;
+                    playIcon.textContent = "⏸";
+                    playText.textContent = "Pause";
+                    audioStatusEl.textContent = "En direct 🟢";
+                }).catch(() => {
+                    audioStatusEl.textContent = "Échec du flux (sécurité ou géo-blocage) 🔴";
+                });
+            } else {
+                audioEl.pause();
+                audioEl.src = "";
+                isPlaying = false;
+                playIcon.textContent = "▶";
+                playText.textContent = "Écouter";
+                audioStatusEl.textContent = "En pause";
+            }
+        };
+
+        // Recherche en temps réel
+        searchInput.oninput = (e) => {
+            const query = e.target.value.toLowerCase();
+            const filtered = countriesData.filter(c => 
+                c.name.toLowerCase().includes(query) || 
+                c.capital.toLowerCase().includes(query) ||
+                c.radioName.toLowerCase().includes(query)
+            );
+            renderCountryList(filtered);
+        };
+
+        // Initialisation au chargement de la page
+        changeCountry(selectedCountry, null);
+        renderCountryList(countriesData);
+    </script>
+</body>
+</html>
